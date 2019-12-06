@@ -32,6 +32,13 @@ class EncoderCNN(nn.Module):
     
 class DecoderRNN(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers, max_seq_len=20):
+        '''
+        :param embed_size: dimension of word embedding vectors
+        :param hidden_size: dimension of lstm hidden states
+        :param vocab_size: the size of vocabulary wrapper
+        :param num_layers: number of layers in lstm
+        :param max_seq_len: maximum sentence length
+        '''
         """Set the hyper-parameters and build the layers."""
         super(DecoderRNN, self).__init__()
         # word embedding
@@ -58,6 +65,10 @@ class DecoderRNN(nn.Module):
         return outputs
     
     def sample(self, features, states):
+        '''
+        :param features: extracted image features from CNN
+        :param states: lstm state
+        '''
         """Samples captions for given image features (Greedy search)."""
         sampled_ids = []
         inputs = features.unsqueeze(1)
