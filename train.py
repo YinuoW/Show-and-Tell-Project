@@ -90,6 +90,56 @@ def train_func(model_path, crop_img_size, vocab_sen_path,
                            os.path.join(model_path,
                                         'encoder-%d-%d.pkl' % (epoch + 1, i + 1)))
 
+def train_loss():
+    image_path='./data/resized2014'
+    caption_img_path='./data/annotations/captions_train2014.json'
+    embed_size=256
+    hidden_size=512
+    num_layers=1
+    batch_size=128
+    crop_size=224
+    vocabulary_path='./data/vocab.pkl'
+    with open(vocabulary_path, 'rb') as f:
+        vocab = pickle.load(f)
+    transform = transforms.Compose([ 
+            transforms.RandomCrop(crop_size),
+            transforms.RandomHorizontalFlip(), 
+            transforms.ToTensor(), 
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    data_loader = get_loader(image_path, caption_img_path, vocab,
+                             transform, batch_size,
+                             shuffle=True, num_workers=2)
+    loss_data=[]
+    perp_data=[]
+    for i, (images, captions, lengths) in enumerate(data_loader):
+        if i>=15:
+            break
+        encoder = EncoderCNN(embed_size)
+        encoder.eval()  # encoder evaluation mode
+        decoder = DecoderRNN(embed_size, hidden_size, len(vocab), num_layers)
+        decoder.eval()  # decoder evaluation mode
+        encoder_path='./models/encoder-%d-%d.pkl' % (i/3+1, 1000*(i%3+1))
+        decoder_path='./models/decoder-%d-%d.pkl' % (i/3+1, 1000*(i%3+1))
+        encoder.load_state_dict(torch.load(encoder_path))
+        decoder.load_state_dict(torch.load(decoder_path))
+        images = Variable(images)
+        captions = Variable(captions)
+        criterion = nn.CrossEntropyLoss()
+
+        if torch.cuda.is_available():
+            images = images.cuda()
+            captions = captions.cuda()
+            encoder.cuda()
+            decoder.cuda()
+        targets = pack_padded_sequence(captions, lengths, batch_first=True)[0]
+
+        features = encoder(images)
+        outputs = decoder(features, captions, lengths)
+        loss = criterion(outputs, targets)
+        loss_data.append(loss.data)
+        perp_data.append(np.exp(loss.data.cpu()))
+        print('Epoch %d, Loss: %.4f, Perplexity: %5.4f' %(i+1, loss.data, np.exp(loss.data.cpu())))
+    return loss_data, perp_data
 
 if __name__ == '__main__':
     model_path = './models/'
