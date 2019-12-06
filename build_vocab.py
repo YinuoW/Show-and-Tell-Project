@@ -6,6 +6,12 @@ from pycocotools.coco import COCO
 
 
 class Vocab(object):
+    '''
+    This is the calss of vocabulary
+    wrod_idx_dict: a dictionary where word is key and index is value
+    idx_word_dict: a dictionary where index is key and word is value
+    count: record the current index of word
+    '''
     def __init__(self):
         self.word_idx_dict = {}
         self.idx_word_dict = {}
@@ -16,6 +22,7 @@ class Vocab(object):
         self.append('<unk>')
 
     def append(self, word):
+        # append the word to the Vocab object
         is_contained = word in self.word_idx_dict
         if (is_contained == False):
             self.word_idx_dict[word] = self.count
@@ -23,16 +30,22 @@ class Vocab(object):
             self.count += 1
 
     def __call__(self, word):
+        # get the index of a word
         if word in self.word_idx_dict:
             return self.word_idx_dict[word]
         else:
             return self.word_idx_dict['<unk>']
 
     def __len__(self):
+        # get the length of the object
         return len(self.word_idx_dict)
 
 
 def build_vocab(json, threshold):
+    '''
+    This function takes a json file and threshold number
+    and returns the corresponding vocabulary object
+    '''
     counts = count_vocab(json)
     words = list()
     for word, count in counts.items():
@@ -45,6 +58,7 @@ def build_vocab(json, threshold):
 
 
 def count_vocab(json):
+    # helper function to get counts for each word
     coco = COCO(json)
     counts = Counter()
     idxs = coco.anns.keys()
@@ -53,6 +67,7 @@ def count_vocab(json):
 
 
 def iter_count(idxs, coco, counts):
+    # helper function to get counts for each word in iterative way
     for i in range(len(idxs)):
         idx = idxs[i]
         caption = str(coco.anns[idx]['caption'])
