@@ -10,9 +10,11 @@ class EncoderCNN(nn.Module):
         """Load the pretrained ResNet-152 and replace top fc layer."""
         super(EncoderCNN, self).__init__()
         self.resnet = models.resnet152(pretrained=True)
+        # disable grad for resnet parameters
         for param in self.resnet.parameters():
             param.requires_grad = False
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, embed_size)
+        # batchNorm for CNN
         self.bn = nn.BatchNorm1d(embed_size, momentum=0.01)
         self.init_weights()
         
@@ -32,7 +34,9 @@ class DecoderRNN(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers, max_seq_len=20):
         """Set the hyper-parameters and build the layers."""
         super(DecoderRNN, self).__init__()
+        # word embedding
         self.embed = nn.Embedding(vocab_size, embed_size)
+        # load LSTM and set hyper-parameters
         self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
         self.linear = nn.Linear(hidden_size, vocab_size)
         self.init_weights()
@@ -60,11 +64,11 @@ class DecoderRNN(nn.Module):
         for i in range(self.max_seq_len):                                     
             hiddens, states = self.lstm(inputs, states)          
             outputs = self.linear(hiddens.squeeze(1))            
-            ## Get the index of the vocabulary that is of highest probability
+            # Get the index of the vocabulary that is of highest probability
             predicted = outputs.max(1)[1]
             sampled_ids.append(predicted)
             inputs = self.embed(predicted)
-            ## increase the dimension from 2 to 3
+            # increase the dimension from 2 to 3
             inputs = inputs.unsqueeze(1)
         sampled_ids = torch.cat(sampled_ids, 0)
         return sampled_ids.squeeze()
