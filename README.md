@@ -10,7 +10,7 @@ The files can be divided into three parts:
 - `train.py`: Train CNN and RNN model.
 3. Helper files:
 - `resize.py`: Preprocess the images to make the image sizes uniform.
-- `load_data.py`: Creates the CoCoDataset and a DataLoader for it.
+- `load_data.py`: Creates the ImageDataset and a DataLoader for it.
 - `build_vocab.py`:  Build vocabulary dictionary.
 
 ## Setup
