@@ -20,9 +20,11 @@ mkdir data
 wget http://msvocds.blob.core.windows.net/annotations-1-0-3/captions_train-val2014.zip -P ./data/
 wget http://msvocds.blob.core.windows.net/coco2014/train2014.zip -P ./data/
 wget http://msvocds.blob.core.windows.net/coco2014/val2014.zip -P ./data/
+wget http://msvocds.blob.core.windows.net/coco2014/test2014.zip -P ./data/
 unzip ./data/captions_train-val2014.zip -d ./data/
 unzip ./data/train2014.zip -d ./data/
 unzip ./data/val2014.zip -d ./data/ 
+unzip ./data/test2014.zip -d ./data/
 ```
 2. Download trained model:
 - Download from [this link](https://drive.google.com/drive/folders/13csz2xhNlYAmgFmlBaAaCyuJKRpv7Nfl?usp=sharing) and place these files under `.\data\`
@@ -38,6 +40,8 @@ pip install --user pycocotools
 - `scikit-image`
 - `matplotlib`
 - `tqdm`
+- `PIL`
+- `pickle`
 
 
 ## Model training
