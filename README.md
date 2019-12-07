@@ -44,6 +44,6 @@ python training.py
 ```
 
 ## Reference
-[TensorFlow Implementation of show and tell] (https://github.com/nikhilmaram/Show_and_Tell)
-[Show and Tell: A Neural Image Caption Generator] (https://arxiv.org/pdf/1411.4555.pdf)
-[PyTorch Implementation of show and tell] (https://github.com/ntrang086/image_captioning)
+[TensorFlow Implementation of show and tell](https://github.com/nikhilmaram/Show_and_Tell)
+[Show and Tell: A Neural Image Caption Generator](https://arxiv.org/pdf/1411.4555.pdf)
+[PyTorch Implementation of show and tell](https://github.com/ntrang086/image_captioning)
