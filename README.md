@@ -24,8 +24,8 @@ unzip ./data/captions_train-val2014.zip -d ./data/
 unzip ./data/train2014.zip -d ./data/
 unzip ./data/val2014.zip -d ./data/ 
 ```
-2. Download trained model
-Download from [this link](https://drive.google.com/drive/folders/13csz2xhNlYAmgFmlBaAaCyuJKRpv7Nfl?usp=sharing) and place these files under `.\data\`
+2. Download trained model:
+- Download from [this link](https://drive.google.com/drive/folders/13csz2xhNlYAmgFmlBaAaCyuJKRpv7Nfl?usp=sharing) and place these files under `.\data\`
 3. Set up COCO API:
 ```
 pip install --user pycocotools
@@ -42,7 +42,7 @@ pip install --user pycocotools
 
 ## Model training
 ```
-python training.py
+python train.py
 ```
 
 ## Reference
