@@ -4,14 +4,14 @@ Pytorch implementation of image captioning based on the paper: [Show and Tell: A
 ## Code Organization
 The files can be divided into three parts:
 1. Demo file
-- demo.ipynb: Generate caption for test image.
+- `demo.ipynb`: Generate caption for test image.
 2. Main model files
-- model.py: Provides CNN and RNN models for train and test.
-- train.py: Train CNN and RNN model.
+- `model.py`: Provides CNN and RNN models for train and test.
+- `train.py`: Train CNN and RNN model.
 3. Helper files:
-- resize.py: Preprocess the images to make the image sizes uniform.
-- load_data.py: Creates the CoCoDataset and a DataLoader for it.
-- build_vocab.py:  Build vocabulary dictionary.
+- `resize.py`: Preprocess the images to make the image sizes uniform.
+- `load_data.py`: Creates the CoCoDataset and a DataLoader for it.
+- `build_vocab.py`:  Build vocabulary dictionary.
 
 ## Setup
 1. Download COCO dataset:
@@ -29,12 +29,13 @@ unzip ./data/val2014.zip -d ./data/
 pip install --user pycocotools
 ```
 3. other settings:
-- Python 3
-- nltk
-- numpy
-- scikit-image
-- matplotlib
-- tqdm
+- `Python3`
+- `PyTorch`
+- `nltk`
+- `numpy`
+- `scikit-image`
+- `matplotlib`
+- `tqdm`
 
 
 ## Model training
@@ -43,6 +44,6 @@ python training.py
 ```
 
 ## Reference
-1. [TensorFlow Implementation of show and tell] (https://github.com/nikhilmaram/Show_and_Tell)
-2. [Show and Tell: A Neural Image Caption Generator] (https://arxiv.org/pdf/1411.4555.pdf)
-3. [PyTorch Implementation of show and tell] (https://github.com/ntrang086/image_captioning)
+[TensorFlow Implementation of show and tell] (https://github.com/nikhilmaram/Show_and_Tell)
+[Show and Tell: A Neural Image Caption Generator] (https://arxiv.org/pdf/1411.4555.pdf)
+[PyTorch Implementation of show and tell] (https://github.com/ntrang086/image_captioning)
