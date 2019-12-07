@@ -24,11 +24,13 @@ unzip ./data/captions_train-val2014.zip -d ./data/
 unzip ./data/train2014.zip -d ./data/
 unzip ./data/val2014.zip -d ./data/ 
 ```
-2. Set up COCO API:
+2. Download trained model
+Download from [this link](https://drive.google.com/drive/folders/13csz2xhNlYAmgFmlBaAaCyuJKRpv7Nfl?usp=sharing) and place these files under `.\data\`
+3. Set up COCO API:
 ```
 pip install --user pycocotools
 ```
-3. other settings:
+4. other settings:
 - `Python3`
 - `PyTorch`
 - `nltk`
@@ -44,6 +46,6 @@ python training.py
 ```
 
 ## Reference
-[TensorFlow Implementation of show and tell](https://github.com/nikhilmaram/Show_and_Tell)
-[Show and Tell: A Neural Image Caption Generator](https://arxiv.org/pdf/1411.4555.pdf)
-[PyTorch Implementation of show and tell](https://github.com/ntrang086/image_captioning)
+1. [TensorFlow Implementation of show and tell](https://github.com/nikhilmaram/Show_and_Tell)
+2. [Show and Tell: A Neural Image Caption Generator](https://arxiv.org/pdf/1411.4555.pdf)
+3. [PyTorch Implementation of show and tell](https://github.com/ntrang086/image_captioning)
