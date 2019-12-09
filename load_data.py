@@ -23,7 +23,7 @@ class CocoDataset(data.Dataset):
             vocab: if there is no preexist vocabs, create a new one; othereise, load vocabs.
         """
         assert(mode == "train" or mode == "val")
-        self.dataset = json.load(open(annotation, 'r'))
+        self.dataset = read_json(annotation)
         self.mode = mode
         self.transform = transform
         self.folder = folder
@@ -33,6 +33,10 @@ class CocoDataset(data.Dataset):
         self.get_index()
         self.start_word = start_word
         self.end_word = end_word
+    
+    def __len__(self):
+        # get the total number of ids
+        return len(self.coco.anns.keys())
 
     def __getitem__(self, index):
         # return image and caption as output
@@ -42,8 +46,9 @@ class CocoDataset(data.Dataset):
         caption = coco.anns[curr_id]['caption']
         img_id = coco.anns[curr_id]['image_id']
         path = coco.loadImgs(img_id)[0]['file_name']
-        image = Image.open(os.path.join(self.folder, path)).convert('RGB')
-        caption = caption2id(self, index, img_id)
+        img_path = os.path.join(self.folder, path)
+        image = Image.open(img_path).convert('RGB')
+        caption = caption2id(index, img_id, curr_id)
         
         return image, caption
         
@@ -59,26 +64,25 @@ class CocoDataset(data.Dataset):
         self.imgs = imgs
         self.anns = anns
     
-    def caption2id(self, index, img_id):
-        # convert captions to ids
+    def read_json(self, json_path):
+        with open(json_path, 'r') as j:
+            json_data = json.load(j)
+        return json_data
+    
+    def caption2id(self, index, img_id, curr_id):
         caption = coco.anns[curr_id]['caption']
         path = coco.loadImgs(img_id)[0]['file_name']
-        image = Image.open(os.path.join(self.folder, path)).convert('RGB')
+        img_path = os.path.join(self.folder, path)
+        image = Image.open(img_path).convert('RGB')
         if self.transform is not None:
             image = self.transform(image)
-
-        # Convert captions to ids.
-        tokens = nltk.tokenize.word_tokenize(str(caption).lower())
-        caption = []
-        caption.append(self.vocabulary(self.start_word))
-        caption.extend([vocab(token) for token in tokens])
-        caption.append(self.vocabulary(self.end_word))
-        caption = torch.Tensor(caption).long()
+        captions = nltk.tokenize.word_tokenize(str(caption).lower())
+        caption_list = []
+        caption_list.append(self.vocabulary(self.start_word))
+        caption_list.extend([vocab(cap) for cap in captions])
+        caption_list.append(self.vocabulary(self.end_word))
+        caption = torch.Tensor(caption_list).long()
         return caption
-        
-    def __len__(self):
-        # get the total number of ids
-        return len(self.coco.anns.keys())
 
 
 def collate_fn(data_batch):
@@ -91,10 +95,10 @@ def collate_fn(data_batch):
     images, captions = zip(*data_batch)
     
     # Merge images
-    images = torch.cat(images, 0)
+    images = torch.stack(images, dim=0)
 
     # Merge captions
-    lengths = otrch.Tensor([len(x) for x in captions]).long()
+    lengths = torch.Tensor([len(x) for x in captions]).long()
     tokens = torch.zeros(len(captions), lengths.max()).long()
     _cur_ind = 0
     for i, cap in enumerate(captions):
