@@ -27,7 +27,9 @@ unzip ./data/val2014.zip -d ./data/
 unzip ./data/test2014.zip -d ./data/
 ```
 2. Download trained model:
-- Download from [this link](https://drive.google.com/drive/folders/13csz2xhNlYAmgFmlBaAaCyuJKRpv7Nfl?usp=sharing) and place these files under `.\data\`
+- Download from [this link](https://drive.google.com/drive/folders/13csz2xhNlYAmgFmlBaAaCyuJKRpv7Nfl?usp=sharing)
+- place the trained data files under `.\data\`
+- place test images under `.\test\`
 3. Set up COCO API:
 ```
 pip install --user pycocotools
@@ -46,6 +48,8 @@ pip install --user pycocotools
 
 ## Model training
 ```
+python resize.py
+python build_vocab.py
 python train.py
 ```
 
