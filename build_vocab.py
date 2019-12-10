@@ -78,7 +78,7 @@ def iter_count(idxs, coco, counts):
 
 def main():
     caption_dir = './data/annotations/captions_train2014.json'
-    vocab_dir = './data/vocab2.pkl'
+    vocab_dir = './data/vocab.pkl'
     threshold = 4
     vocab = build_vocab(caption_dir, threshold=threshold)
     with open(vocab_dir, 'wb') as f:
